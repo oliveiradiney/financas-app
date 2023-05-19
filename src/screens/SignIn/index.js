@@ -9,10 +9,9 @@ export default function SignIn(){
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const { user } = useContext(AuthContext);
 
     function handleLogin(){
-        console.log(user.nome)
+      
     }
 
     return(
