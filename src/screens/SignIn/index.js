@@ -8,10 +8,10 @@ export default function SignIn(){
     const navigation = useNavigation();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
+    const { signIn } = useContext(AuthContext);
 
     function handleLogin(){
-      
+        signIn(email, password);
     }
 
     return(
@@ -35,9 +35,10 @@ export default function SignIn(){
                     <Input 
                         placeholder="Senha"
                         autoCorrect={false}
+                        secureTextEntry
                         autoCapitalize="none"
                         value={password}
-                        onChangeText={ (text) => setPassword(text)}
+                        onChangeText={(text) => setPassword(text)}
                     />
                 </AreaInput>
 
