@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { AuthContext } from '../../contexts/auth';
 import { useNavigation } from '@react-navigation/native';
+import Header from '../../components/Header';
 import {
     Container,
     Logout,
@@ -17,6 +18,7 @@ export default function Profile() {
 
     return (
         <Container>
+            <Header />
             <Nome>
                 {user && user.nome}
             </Nome>
