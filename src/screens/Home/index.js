@@ -35,9 +35,9 @@ export default function Home({navigation}){
             <Header />
             <Container>
                 <Nome>
-                    Diney
+                    {user && user.nome}
                 </Nome>
-                <Saldo>R$ 123,00</Saldo>
+                <Saldo>R$ 200</Saldo>
             </Container>
 
             <Title>Ultimas movimentações</Title>
