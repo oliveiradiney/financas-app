@@ -36,6 +36,7 @@ export default function New() {
                 }
             ]
         )
+        
     }
 
     async function handleAdd(){
@@ -59,6 +60,7 @@ export default function New() {
         });
 
         setValor('');
+        setTipo('')
         Keyboard.dismiss();
 
         navigation.navigate('Home')
