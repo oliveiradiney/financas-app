@@ -5,7 +5,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const AuthContext = createContext({});
 
-function AuthProvider({children}){
+function AuthProvider({ children }) {
 
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -13,10 +13,10 @@ function AuthProvider({children}){
 
 
     useEffect(() => {
-        async function loadStorage(){
+        async function loadStorage() {
             const storageUser = await AsyncStorage.getItem('Auth_user');
 
-            if(storageUser){
+            if (storageUser) {
                 setUser(JSON.parse(storageUser));
                 setLoading(false);
             }
@@ -29,71 +29,73 @@ function AuthProvider({children}){
 
     //Função para logar o usuario
     async function signIn(email, password) {
-      
-            const value = await firebase.auth().signInWithEmailAndPassword(email, password);
-            let uid = value.user.uid;
-            await firebase.database().ref('users').child(uid).once('value')
-                .then((snapshot) => {
-                    let data = {
-                        uid: uid,
-                        nome: snapshot.val().nome,
-                        email: value.user.email,
-                    };
-                    setUser(data);
-                    storageUser(data);
-                })
-        .catch((error) => {
-            alert(error.code);
-        });
-           
+        setLoadingAuth(true);
+        const value = await firebase.auth().signInWithEmailAndPassword(email, password);
+        let uid = value.user.uid;
+        await firebase.database().ref('users').child(uid).once('value')
+            .then((snapshot) => {
+                let data = {
+                    uid: uid,
+                    nome: snapshot.val().nome,
+                    email: value.user.email,
+                };
+                setUser(data);
+                storageUser(data);
+                setLoadingAuth(false);
+            })
+            .catch((error) => {
+                alert(error.code);
+                setLoadingAuth(false);
+            });
+
     }
 
 
     //cadastrar usuario
-    async function signUp(email, password, nome){ 
+    async function signUp(email, password, nome) {
         setLoadingAuth(true)
         await firebase.auth().createUserWithEmailAndPassword(email, password)
-        .then(async (value) => {
-            let uid = value.user.uid;
-            await firebase.database().ref('users').child(uid).set({
-                saldo: 0,
-                nome: nome
+            .then(async (value) => {
+                let uid = value.user.uid;
+                await firebase.database().ref('users').child(uid).set({
+                    saldo: 0,
+                    nome: nome
+                })
+                    .then(() => {
+                        let data = {
+                            uid: uid,
+                            nome: nome,
+                            email: value.user.email,
+                        };
+                        setUser(data);
+                        storageUser(data)
+                        setLoadingAuth(false)
+
+                    })
             })
-            .then(() => {
-                let data = {
-                    uid: uid,
-                    nome: nome,
-                    email: value.user.email,
-                };
-                setUser(data);
-                storageUser(data)
+            .catch((error) => {
+                Alert(error.code)
                 setLoadingAuth(false)
-    
             })
-        })
-        .catch((error) => {
-            Alert(error.code)
-            setLoadingAuth(false)
-          })
     }
 
-    async function storageUser(data){
+    async function storageUser(data) {
         await AsyncStorage.setItem('Auth_user', JSON.stringify(data));
     }
 
-    async function signOut(data){
+    async function signOut(data) {
         await firebase.auth().signOut();
         await AsyncStorage.clear()
-        .then(() =>{
-            setUser(null);
-        })
+            .then(() => {
+                setUser(null);
+            })
     }
 
-    return(
-        <AuthContext.Provider value={{signed: !!user, user, loading, signUp, signIn, signOut}}>
+    return (
+        <AuthContext.Provider value={{ signed: !!user, user, loading, signUp, signIn, signOut, loadingAuth }}>
             {children}
         </AuthContext.Provider>
-        
+
     );
 }
 
