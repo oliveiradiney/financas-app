@@ -32,7 +32,7 @@ function AppRoutes() {
             }}
             
         >
-            <Drawer.Screen name="Início" component={Home} />
+            <Drawer.Screen name="Home" component={Home} />
             <Drawer.Screen name="Perfil" component={Profile} />
             <Drawer.Screen name="Registrar" component={New} />
         </Drawer.Navigator>
