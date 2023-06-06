@@ -11,6 +11,9 @@ if (System.getenv('EX_UPDATES_NATIVE_DEBUG') == "1") {
     expoDebuggableVariants = []
   }
 }
+project.ext.react = [
+ enableHermes: true,  // clean and rebuild if changing
+]
 
 
 /**

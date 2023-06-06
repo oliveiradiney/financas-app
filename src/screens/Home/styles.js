@@ -10,7 +10,7 @@ export const Container = styled.View`
     margin-bottom: 25px;
 `;
 
-export const Nome= styled.Text`
+export const Nome = styled.Text`
     font-size: 18px;
     color: #FFF;
     font-style: italic;

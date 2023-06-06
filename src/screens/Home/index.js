@@ -1,13 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 
-import { Alert, TouchableOpacity } from 'react-native';
+import { Alert, TouchableOpacity, Platform} from 'react-native';
 import { AuthContext } from '../../contexts/auth';
 import Header from '../../components/Header';
-import { format, isBefore, isPast } from 'date-fns';
+import { format, isBefore } from 'date-fns';
 import HistoricoList from '../../components/HistoricoList';
 import firebase from '../../services/firebaseConnection';
 import Icon from '@expo/vector-icons/MaterialIcons';
-
+import DatePicker from '../../components/DatePicker';
 
 
 import {
@@ -19,10 +19,10 @@ import {
     List,
     Area
 } from './styles';
-import { Picker } from '@react-native-community/picker';
+
 
 export default function Home({ navigation }) {
-    const { user, signOut } = useContext(AuthContext);
+    const { user  } = useContext(AuthContext);
     const [historico, setHistorico] = useState([]);
     const [saldo, setSaldo] = useState(0);
 
@@ -60,21 +60,21 @@ export default function Home({ navigation }) {
         }
 
         loadlist();
-    }, []);
+    }, [newDate]);
 
     function handleDelete(data) {
 
-        const [diaItem, mesItem, anoItem] = data.date.split('/');
-        const dataItem = new Date(`${anoItem}/${mesItem}/${diaItem}`);
+        // const [diaItem, mesItem, anoItem] = data.date.split('/');
+        // const dataItem = new Date(`${anoItem}/${mesItem}/${diaItem}`);
 
-        const formatDiaHoje = format(new Date(), 'dd/mm/yyyy');
-        const [diahoje, mesHoje, anoHoje] = formatDiaHoje.split('/');
-        const dateHoje = new Date(`${anoHoje}/${mesHoje}/${diahoje}`)
+        // const formatDiaHoje = format(new Date(), 'dd/mm/yyyy');
+        // const [diahoje, mesHoje, anoHoje] = formatDiaHoje.split('/');
+        // const dateHoje = new Date(`${anoHoje}/${mesHoje}/${diahoje}`)
 
-        if (isBefore(dataItem, dateHoje)) {
-            alert('Voce não pode excluir um registro antigo');
-            return;
-        }
+        // if (isBefore(dataItem, dateHoje)) {
+        //     alert('Voce não pode excluir um registro antigo');
+        //     return;
+        // }
 
         Alert.alert(
             'Cuidado Atenção!',
@@ -108,7 +108,17 @@ export default function Home({ navigation }) {
     }
 
     function handleShowPicker(){
+        setShow(true);
+    }
 
+    function handleClose () {
+        setShow(false)
+    }
+
+    const onChange = (date) => {
+        setShow(Platform.OS === 'ios')
+        setNewDate(date)
+        console.log(date)
     }
 
     return (
@@ -132,20 +142,21 @@ export default function Home({ navigation }) {
 
 
             <List
+               
                 contentContainerStyle={{ paddingBottom: 20, paddingRight: 10, paddingLeft: 10 }}
-                style={{ height: '95%' }}
                 showsVerticalScrollIndicator={false}
                 data={historico}
                 keyExtractor={item => item.key}
                 renderItem={({ item }) => (<HistoricoList data={item} deleteItem={handleDelete} />)}
             />
-            {/* {
-                show && (
-                    <Picker 
-
-                    />
-                )
-            } */}
+             {show && (
+                <DatePicker
+                    onClose={handleClose}
+                    date={newDate}
+                    onChange={onChange}
+                />
+            )}
+          
         </Background>
     )
 }
