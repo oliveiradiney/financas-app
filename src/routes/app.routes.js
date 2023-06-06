@@ -6,12 +6,14 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 import Home from "../screens/Home";
 import New from "../screens/New";
 import Profile from "../screens/Profile";
+import CustomDrawer from "../components/CustomDrawer";
 
 const Drawer = createDrawerNavigator();
 
 function AppRoutes() {
     return (
         <Drawer.Navigator
+            drawerContent={(props) => <CustomDrawer {...props}/> }
             useLegacyImplementation
             screenOptions={{
                 drawerStyle: {
@@ -32,7 +34,7 @@ function AppRoutes() {
             }}
             
         >
-            <Drawer.Screen name="Início" component={Home} />
+            <Drawer.Screen name="Home" component={Home} />
             <Drawer.Screen name="Perfil" component={Profile} />
             <Drawer.Screen name="Registrar" component={New} />
         </Drawer.Navigator>

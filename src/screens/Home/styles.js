@@ -10,7 +10,7 @@ export const Container = styled.View`
     margin-bottom: 25px;
 `;
 
-export const Nome= styled.Text`
+export const Nome = styled.Text`
     font-size: 18px;
     color: #FFF;
     font-style: italic;
@@ -27,6 +27,12 @@ export const Title = styled.Text`
     margin-left: 15px;
     color: #00b94a;
     margin-bottom: 10px;
+`;
+
+export const Area = styled.View`
+    flex-direction: row;
+    margin-left: 15px;
+    align-items: baseline;
 `;
 
 export const List = styled.FlatList.attrs({
